@@ -30,8 +30,7 @@ export async function createPrintifyOrder(customer: any) {
   };
 
   const response = await fetch(
-    `https://api.printify.com/v1/shops/${26984957}/orders.json`,
-    {
+const url = `https://api.printify.com/v1/shops/${shopId}/orders.json`;    {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
