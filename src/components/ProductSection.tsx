@@ -1,4 +1,3 @@
-import Image from "next/image";
 import BuyButton from "./BuyButton";
 
 const FEATURES = [
@@ -11,6 +10,7 @@ const FEATURES = [
 ];
 
 const product = {
+  title: "Minimal Anime Ocean Desk Mat",
   images: [
     {
       src: "https://images.printify.com/mockup/69c847c327ac868284004850/65240/6570/desk-mat.jpg?camera_label=front&t=1774824406643&s=500",
@@ -37,13 +37,11 @@ const image =
 // Product image loaded from Printify URL
 function ProductImagePlaceholder() {
   return (
-    <div className="relative w-full h-full">
-      <Image
+    <div className="flex justify-center items-center w-full">
+      <img
         src={image}
-        alt="Minimal Anime Ocean Desk Mat"
-        fill
-        className="object-cover"
-        sizes="(max-width: 1024px) 100vw, 50vw"
+        alt={product.title}
+        className="w-full max-w-[600px] h-auto object-contain"
       />
     </div>
   );
@@ -53,7 +51,7 @@ export default function ProductSection() {
   return (
     <section
       id="product"
-      className="relative bg-ink-900 py-24 md:py-32 px-6 overflow-hidden"
+      className="relative bg-ink-900 py-24 md:py-32 px-6 overflow-hidden max-w-6xl mx-auto"
     >
       {/* ── Section background glows ── */}
       <div className="absolute inset-0 pointer-events-none">
@@ -66,10 +64,10 @@ export default function ProductSection() {
           The Product
         </p>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr] gap-16 items-center">
           {/* ── Product image ── */}
-          <div className="order-1 lg:order-1">
-            <div className="glow-border product-frame rounded-lg overflow-hidden aspect-[8/5] shadow-2xl shadow-black/60">
+          <div className="order-1 md:order-1 w-full flex justify-center">
+            <div className="glow-border product-frame w-full rounded-lg overflow-hidden shadow-2xl shadow-black/60">
               <ProductImagePlaceholder />
             </div>
 
