@@ -1,6 +1,6 @@
 // ─── CONFIG: replace placeholders with your product metadata ─────────────────
-const PRINTIFY_PRODUCT_ID = "69c847c327ac868284004850"; // <-- Set to your real product ID
-const PRINTIFY_VARIANT_ID = 65240; // <-- Set to your real variant ID (numeric)
+const PRINTIFY_PRODUCT_ID: string = process.env.PRINTIFY_PRODUCT_ID!;
+const PRINTIFY_VARIANT_ID: number = Number(process.env.PRINTIFY_VARIANT_ID!);
 // ─────────────────────────────────────────────────────────────────────────────
 
 export interface ShippingAddress {
@@ -31,8 +31,8 @@ export async function createPrintifyOrder(
   externalId: string | undefined,
   shipping: ShippingAddress
 ): Promise<PrintifyOrderResponse> {
-  const apiKey = process.env.PRINTIFY_API_KEY!;
-  const shopId = process.env.PRINTIFY_SHOP_ID!;
+  const apiKey: string = process.env.PRINTIFY_API_KEY!;
+  const shopId: string = process.env.PRINTIFY_SHOP_ID!;
 
 
   if (!apiKey) {
@@ -43,8 +43,18 @@ export async function createPrintifyOrder(
     console.error("[Printify] PRINTIFY_SHOP_ID is missing!");
     throw new Error("PRINTIFY_SHOP_ID is missing");
   }
+  if (!PRINTIFY_PRODUCT_ID) {
+    console.error("[Printify] PRINTIFY_PRODUCT_ID is missing!");
+    throw new Error("PRINTIFY_PRODUCT_ID is missing");
+  }
+  if (!PRINTIFY_VARIANT_ID || isNaN(PRINTIFY_VARIANT_ID)) {
+    console.error("[Printify] PRINTIFY_VARIANT_ID is missing or not a number!");
+    throw new Error("PRINTIFY_VARIANT_ID is missing or not a number");
+  }
   console.log(`[Printify] apiKey exists:`, Boolean(apiKey));
   console.log(`[Printify] shopId:`, shopId);
+  console.log(`[Printify] productId:`, PRINTIFY_PRODUCT_ID);
+  console.log(`[Printify] variantId:`, PRINTIFY_VARIANT_ID);
 
   const payload = {
     external_id: externalId || undefined,
