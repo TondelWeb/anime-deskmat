@@ -1,0 +1,154 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── CSS Variables ─── */
+:root {
+  --ink-950: #05050a;
+  --ink-900: #0a0a12;
+  --ink-800: #11111e;
+  --ink-700: #1a1a2e;
+  --wave-500: #5a9ebe;
+  --sakura-400: #e89ab0;
+}
+
+/* ─── Base reset ─── */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ─── Noise texture overlay (grain for premium feel) ─── */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px 128px;
+}
+
+/* ─── Utility: shimmer text ─── */
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    #a0a0b8 0%,
+    #f0f0f5 40%,
+    #7eb8d4 60%,
+    #a0a0b8 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3.5s linear infinite;
+}
+
+/* ─── Utility: glow border on hover ─── */
+.glow-border {
+  position: relative;
+  transition: box-shadow 0.4s ease;
+}
+
+.glow-border:hover {
+  box-shadow: 0 0 0 1px rgba(90, 158, 190, 0.4),
+    0 0 32px rgba(90, 158, 190, 0.15), 0 0 64px rgba(90, 158, 190, 0.05);
+}
+
+/* ─── Buy button pulse ring ─── */
+.btn-pulse {
+  position: relative;
+}
+
+.btn-pulse::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 0 rgba(90, 158, 190, 0.5);
+  animation: pulse-ring 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(90, 158, 190, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(90, 158, 190, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(90, 158, 190, 0);
+  }
+}
+
+/* ─── Horizontal rule with gradient ─── */
+.gradient-hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(90, 158, 190, 0.3),
+    transparent
+  );
+}
+
+/* ─── Staggered animation delays ─── */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-600 { animation-delay: 600ms; }
+.delay-700 { animation-delay: 700ms; }
+
+/* ─── Initially hidden for animation ─── */
+.animate-fade-up,
+.animate-fade-in {
+  opacity: 0;
+}
+
+/* ─── Product image container depth effect ─── */
+.product-frame {
+  background: radial-gradient(
+      ellipse at 30% 20%,
+      rgba(90, 158, 190, 0.08) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse at 70% 80%,
+      rgba(232, 154, 176, 0.06) 0%,
+      transparent 60%
+    ),
+    linear-gradient(135deg, #0f0f1e 0%, #080810 100%);
+}
+
+/* ─── Custom scrollbar ─── */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--ink-950);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(90, 158, 190, 0.3);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(90, 158, 190, 0.5);
+}
+
+/* ─── Selection color ─── */
+::selection {
+  background: rgba(90, 158, 190, 0.3);
+  color: #f0f0f5;
+}
