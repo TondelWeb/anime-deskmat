@@ -4,10 +4,11 @@ import { useState } from "react";
 import BuyButton from "./BuyButton";
 
 // ─── Variant data ─────────────────────────────────────────────────────────────
-const productVariants: Record<string, { label: string; price: number; images: string[] }> = {
+const productVariants: Record<string, { label: string; price: number; variantId: string; images: string[] }> = {
   "12x18": {
     label: '12" × 18"',
     price: 24.99,
+    variantId: "15871701174317138608",
     images: [
       "https://images.printify.com/mockup/69c847c327ac868284004850/65240/6570/desk-mat.jpg",
       "https://images.printify.com/mockup/69c847c327ac868284004850/65240/6576/desk-mat.jpg",
@@ -15,9 +16,10 @@ const productVariants: Record<string, { label: string; price: number; images: st
       "https://images.printify.com/mockup/69c847c327ac868284004850/65240/6572/desk-mat.jpg",
     ],
   },
-  "12x22": {
+"12x22": {
     label: '12" × 22"',
-    price: 27.99,
+    price: 29.99,
+    variantId: "14263994076559358649",
     images: [
       "https://images.printify.com/mockup/69c847c327ac868284004850/65241/6569/desk-mat.jpg",
       "https://images.printify.com/mockup/69c847c327ac868284004850/65241/6575/desk-mat.jpg",
@@ -27,7 +29,8 @@ const productVariants: Record<string, { label: string; price: number; images: st
   },
   "16x32": {
     label: '16" × 32"',
-    price: 26.99,
+    price: 32.99,
+    variantId: "19248939720562422893",
     images: [
       "https://images.printify.com/mockup/69c847c327ac868284004850/72580/16170/desk-mat.jpg",
       "https://images.printify.com/mockup/69c847c327ac868284004850/72580/16173/desk-mat.jpg",
