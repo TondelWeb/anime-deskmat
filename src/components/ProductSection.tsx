@@ -1,3 +1,4 @@
+import Image from "next/image";
 import BuyButton from "./BuyButton";
 
 const FEATURES = [
@@ -9,175 +10,42 @@ const FEATURES = [
   { icon: "◈", label: "Minimal Anime Ocean Print" },
 ];
 
-// SVG placeholder that mimics an anime ocean desk mat preview
+const product = {
+  images: [
+    {
+      src: "https://images.printify.com/mockup/69c847c327ac868284004850/65240/6570/desk-mat.jpg?camera_label=front&t=1774824406643&s=500",
+    },
+  ],
+  variants: [
+    {
+      id: "size-xl",
+      price: 2999,
+      images: [
+        {
+          src: "https://images.printify.com/mockup/69c847c327ac868284004850/65240/6570/desk-mat.jpg?camera_label=front&t=1774824406643&s=500",
+        },
+      ],
+    },
+  ],
+};
+
+const image =
+  product.images?.[0]?.src ||
+  product.variants?.[0]?.images?.[0]?.src ||
+  "https://via.placeholder.com/300";
+
+// Product image loaded from Printify URL
 function ProductImagePlaceholder() {
   return (
-    <svg
-      viewBox="0 0 800 500"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="w-full h-full"
-    >
-      <defs>
-        <linearGradient id="bgGrad" x1="0" y1="0" x2="800" y2="500" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#0a0a1a" />
-          <stop offset="40%" stopColor="#0d1120" />
-          <stop offset="100%" stopColor="#080812" />
-        </linearGradient>
-        <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="260" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#040410" />
-          <stop offset="100%" stopColor="#0a1535" />
-        </linearGradient>
-        <linearGradient id="seaGrad" x1="0" y1="260" x2="0" y2="500" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#0c1f3a" />
-          <stop offset="100%" stopColor="#060d1a" />
-        </linearGradient>
-        <radialGradient id="moonGlow" cx="600" cy="100" r="80" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#e8f4f8" stopOpacity="1" />
-          <stop offset="40%" stopColor="#c8e8f5" stopOpacity="0.5" />
-          <stop offset="100%" stopColor="#7eb8d4" stopOpacity="0" />
-        </radialGradient>
-        <radialGradient id="moonBody" cx="600" cy="100" r="36" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#f5f9fc" />
-          <stop offset="100%" stopColor="#c8dce8" />
-        </radialGradient>
-        <filter id="blur4" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="4" />
-        </filter>
-        <filter id="blur2">
-          <feGaussianBlur stdDeviation="2" />
-        </filter>
-        <clipPath id="matBounds">
-          <rect x="0" y="0" width="800" height="500" rx="6" />
-        </clipPath>
-      </defs>
-
-      <g clipPath="url(#matBounds)">
-        {/* Background base */}
-        <rect width="800" height="500" fill="url(#bgGrad)" />
-
-        {/* Sky */}
-        <rect width="800" height="275" fill="url(#skyGrad)" />
-
-        {/* Stars */}
-        {[
-          [80, 40], [140, 25], [220, 55], [310, 30], [380, 15], [450, 45],
-          [520, 28], [680, 38], [730, 60], [760, 22], [50, 70], [170, 80],
-          [290, 65], [420, 78], [555, 52], [640, 70], [710, 42], [30, 120],
-          [105, 105], [200, 130], [340, 95], [470, 115], [590, 88], [695, 100],
-          [750, 130], [155, 155], [270, 170], [405, 148], [535, 162], [660, 145]
-        ].map(([cx, cy], i) => (
-          <circle
-            key={i}
-            cx={cx}
-            cy={cy}
-            r={i % 5 === 0 ? 1.2 : 0.7}
-            fill="white"
-            opacity={0.4 + (i % 4) * 0.15}
-          />
-        ))}
-
-        {/* Moon glow */}
-        <circle cx="600" cy="100" r="80" fill="url(#moonGlow)" opacity="0.6" />
-        {/* Moon body */}
-        <circle cx="600" cy="100" r="34" fill="url(#moonBody)" />
-        {/* Moon crater details */}
-        <circle cx="612" cy="88" r="4" fill="#b8cdd8" opacity="0.5" />
-        <circle cx="590" cy="108" r="6" fill="#b0c8d5" opacity="0.4" />
-        <circle cx="610" cy="115" r="3" fill="#b8cdd8" opacity="0.35" />
-
-        {/* Moonlight reflection on water (vertical shimmer) */}
-        <rect x="570" y="270" width="60" height="230" fill="url(#moonGlow)" opacity="0.15" filter="url(#blur4)" />
-        <rect x="590" y="260" width="20" height="240" fill="#c8e8f5" opacity="0.08" filter="url(#blur2)" />
-
-        {/* Distant mountain / island silhouette */}
-        <path
-          d="M 0 240 L 80 160 L 160 200 L 240 130 L 320 185 L 400 275 L 0 275 Z"
-          fill="#06091a"
-          opacity="0.9"
-        />
-        {/* Distant island right */}
-        <path
-          d="M 700 275 L 760 220 L 800 245 L 800 275 Z"
-          fill="#06091a"
-          opacity="0.8"
-        />
-
-        {/* Sea */}
-        <rect y="270" width="800" height="230" fill="url(#seaGrad)" />
-
-        {/* Wave lines — layered for depth */}
-        {/* Far waves */}
-        {[280, 295, 310, 325].map((y, i) => (
-          <path
-            key={`fw${i}`}
-            d={`M 0 ${y} Q 100 ${y - 6} 200 ${y} Q 300 ${y + 6} 400 ${y} Q 500 ${y - 6} 600 ${y} Q 700 ${y + 6} 800 ${y}`}
-            stroke="#1e3a5a"
-            strokeWidth="0.75"
-            fill="none"
-            opacity={0.5 - i * 0.08}
-          />
-        ))}
-        {/* Mid waves */}
-        {[340, 360, 380, 400].map((y, i) => (
-          <path
-            key={`mw${i}`}
-            d={`M 0 ${y} Q 120 ${y - 9} 240 ${y} Q 360 ${y + 9} 480 ${y} Q 600 ${y - 9} 720 ${y} Q 760 ${y + 4} 800 ${y}`}
-            stroke="#1e4060"
-            strokeWidth="1"
-            fill="none"
-            opacity={0.5 - i * 0.06}
-          />
-        ))}
-        {/* Foreground waves */}
-        {[420, 450, 480].map((y, i) => (
-          <path
-            key={`nw${i}`}
-            d={`M 0 ${y} Q 150 ${y - 14} 300 ${y} Q 450 ${y + 14} 600 ${y} Q 700 ${y - 10} 800 ${y}`}
-            stroke="#2a5070"
-            strokeWidth="1.5"
-            fill="none"
-            opacity={0.4 - i * 0.06}
-          />
-        ))}
-
-        {/* Cherry blossom petals floating */}
-        {[
-          [120, 310, 8], [260, 295, 6], [400, 320, 7],
-          [540, 305, 5], [680, 315, 9], [180, 370, 6],
-          [340, 360, 8], [490, 355, 5], [620, 375, 7],
-          [80, 430, 9], [220, 420, 6], [360, 440, 7],
-          [500, 425, 5], [640, 435, 8], [730, 390, 6],
-        ].map(([cx, cy, r], i) => (
-          <g key={`p${i}`} transform={`translate(${cx}, ${cy}) rotate(${i * 37})`}>
-            <ellipse rx={r as number} ry={(r as number) * 0.6} fill="#e89ab0" opacity={0.25 + (i % 3) * 0.1} />
-          </g>
-        ))}
-
-        {/* Mat border / stitching */}
-        <rect
-          x="8" y="8" width="784" height="484"
-          rx="4"
-          stroke="rgba(90,158,190,0.25)"
-          strokeWidth="1.5"
-          fill="none"
-          strokeDasharray="4 8"
-        />
-
-        {/* Brand watermark */}
-        <text
-          x="400"
-          y="492"
-          textAnchor="middle"
-          fill="rgba(90,158,190,0.2)"
-          fontSize="8"
-          fontFamily="monospace"
-          letterSpacing="6"
-        >
-          DESK MAT CO.
-        </text>
-      </g>
-    </svg>
+    <div className="relative w-full h-full">
+      <Image
+        src={image}
+        alt="Minimal Anime Ocean Desk Mat"
+        fill
+        className="object-cover"
+        sizes="(max-width: 1024px) 100vw, 50vw"
+      />
+    </div>
   );
 }
 
