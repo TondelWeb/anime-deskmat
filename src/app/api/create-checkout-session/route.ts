@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
       payment_method_types: ["card"],
       mode: "payment",
 
-      // ── Line items: what the customer is buying ──────────────────────────
+      // ── line items: what the customer is buying ─────────────────────────
       line_items: [
         {
           price_data: {
@@ -35,7 +35,6 @@ export async function POST(req: NextRequest) {
             product_data: {
               name: PRODUCT.name,
               description: PRODUCT.description,
-              // Optional: add images array with hosted product image URL
               // images: ["https://your-domain.com/product-image.jpg"],
             },
           },
@@ -45,11 +44,13 @@ export async function POST(req: NextRequest) {
 
       // ── Collect shipping address for Printify fulfillment ────────────────
       shipping_address_collection: {
-        allowed_countries: [
-          "US", "CA", "GB", "AU", "DE", "FR", "NL", "SE", "NO",
-          "DK", "FI", "BE", "AT", "CH", "NZ", "JP", "SG",
-        ],
+        allowed_countries: ["US"],
       },
+
+      // ── billing address and email collection ─────────────────────────────
+      billing_address_collection: "required",
+      customer_email: undefined, // let Stripe prompt customer for email
+      customer_creation: "always",
 
       // ── Shipping options ─────────────────────────────────────────────────
       shipping_options: [
@@ -57,7 +58,7 @@ export async function POST(req: NextRequest) {
           shipping_rate_data: {
             type: "fixed_amount",
             fixed_amount: { amount: 0, currency: "usd" },
-            display_name: "Standard Shipping",
+            display_name: "Free Shipping",
             delivery_estimate: {
               minimum: { unit: "business_day", value: 7 },
               maximum: { unit: "business_day", value: 14 },
