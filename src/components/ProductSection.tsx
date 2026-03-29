@@ -1,3 +1,5 @@
+// src/components/ProductSection.tsx
+
 import BuyButton from "./BuyButton";
 
 const FEATURES = [
@@ -34,7 +36,7 @@ const image =
   product.variants?.[0]?.images?.[0]?.src ||
   "https://via.placeholder.com/300";
 
-// Product image loaded from Printify URL
+// ── CHANGED: removed white container, image sits directly on dark background
 function ProductImagePlaceholder() {
   return (
     <div className="flex justify-center items-center w-full">
@@ -42,6 +44,7 @@ function ProductImagePlaceholder() {
         src={image}
         alt={product.title}
         className="w-full max-w-[600px] h-auto object-contain"
+        style={{ filter: "drop-shadow(0 25px 50px rgba(0,0,0,0.6))" }}
       />
     </div>
   );
@@ -66,10 +69,9 @@ export default function ProductSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr] gap-16 items-center">
           {/* ── Product image ── */}
-          <div className="order-1 md:order-1 w-full flex justify-center">
-            <div className="glow-border product-frame w-full rounded-lg overflow-hidden shadow-2xl shadow-black/60">
-              <ProductImagePlaceholder />
-            </div>
+          {/* CHANGED: removed glow-border/product-frame/rounded-lg/overflow-hidden/shadow wrapper */}
+          <div className="order-1 md:order-1 w-full flex flex-col items-center">
+            <ProductImagePlaceholder />
 
             {/* Dimensions label */}
             <p className="mt-4 text-center font-mono text-xs text-mist-600 tracking-widest">
@@ -128,18 +130,16 @@ export default function ProductSection() {
 
             {/* Trust signals */}
             <div className="flex items-center justify-center gap-6 mt-4">
-              {[
-                "Secure Checkout",
-                "30-Day Returns",
-                "Ships Worldwide",
-              ].map((t) => (
-                <span
-                  key={t}
-                  className="font-mono text-[10px] text-mist-600 tracking-widest"
-                >
-                  {t}
-                </span>
-              ))}
+              {["Secure Checkout", "30-Day Returns", "Ships Worldwide"].map(
+                (t) => (
+                  <span
+                    key={t}
+                    className="font-mono text-[10px] text-mist-600 tracking-widest"
+                  >
+                    {t}
+                  </span>
+                )
+              )}
             </div>
           </div>
         </div>
