@@ -4,9 +4,10 @@ import { useState } from "react";
 import BuyButton from "./BuyButton";
 
 // ─── Variant data ─────────────────────────────────────────────────────────────
-const productVariants: Record<string, { label: string; images: string[] }> = {
+const productVariants: Record<string, { label: string; price: number; images: string[] }> = {
   "12x18": {
     label: '12" × 18"',
+    price: 24.99,
     images: [
       "https://images.printify.com/mockup/69c847c327ac868284004850/65240/6570/desk-mat.jpg",
       "https://images.printify.com/mockup/69c847c327ac868284004850/65240/6576/desk-mat.jpg",
@@ -16,6 +17,7 @@ const productVariants: Record<string, { label: string; images: string[] }> = {
   },
   "12x22": {
     label: '12" × 22"',
+    price: 27.99,
     images: [
       "https://images.printify.com/mockup/69c847c327ac868284004850/65241/6569/desk-mat.jpg",
       "https://images.printify.com/mockup/69c847c327ac868284004850/65241/6575/desk-mat.jpg",
@@ -25,6 +27,7 @@ const productVariants: Record<string, { label: string; images: string[] }> = {
   },
   "16x32": {
     label: '16" × 32"',
+    price: 26.99,
     images: [
       "https://images.printify.com/mockup/69c847c327ac868284004850/72580/16170/desk-mat.jpg",
       "https://images.printify.com/mockup/69c847c327ac868284004850/72580/16173/desk-mat.jpg",
@@ -48,13 +51,13 @@ export default function ProductSection() {
   const [selectedSize, setSelectedSize] = useState("12x18");
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
-  const currentImages = productVariants[selectedSize].images;
-  // ALWAYS index 0 is the default; activeImageIndex overrides on thumbnail click
+  const currentVariant = productVariants[selectedSize];
+  const currentImages = currentVariant.images;
   const mainImage = currentImages[activeImageIndex] ?? currentImages[0];
 
   function handleSizeSelect(key: string) {
     setSelectedSize(key);
-    setActiveImageIndex(0); // reset to first (main) image on every size switch
+    setActiveImageIndex(0);
   }
 
   return (
@@ -78,16 +81,16 @@ export default function ProductSection() {
           {/* ── LEFT: Image column ── */}
           <div className="order-1 md:order-1 w-full flex flex-col items-center">
 
-            {/* Main image — only ONE rendered, driven by activeImageIndex */}
+            {/* Main image */}
             <div className="flex justify-center items-center w-full">
               <img
                 src={mainImage}
-                alt={productVariants[selectedSize].label}
+                alt={currentVariant.label}
                 className="w-full max-w-[600px] h-auto object-contain drop-shadow-2xl"
               />
             </div>
 
-            {/* Thumbnail strip — images for selected size only */}
+            {/* Thumbnail strip */}
             <div className="flex gap-3 mt-6">
               {currentImages.map((img, index) => (
                 <button
@@ -102,16 +105,16 @@ export default function ProductSection() {
                 >
                   <img
                     src={img}
-                    alt={`${productVariants[selectedSize].label} view ${index + 1}`}
+                    alt={`${currentVariant.label} view ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
                 </button>
               ))}
             </div>
 
-            {/* Dimensions label — updates with selected size */}
+            {/* Size label under image */}
             <p className="mt-4 text-center font-mono text-xs text-mist-600 tracking-widest">
-              {productVariants[selectedSize].label}
+              {currentVariant.label}
             </p>
           </div>
 
@@ -128,10 +131,10 @@ export default function ProductSection() {
             {/* Thin rule */}
             <hr className="gradient-hr my-6" />
 
-            {/* Price */}
+            {/* Price — dynamic */}
             <div className="flex items-baseline gap-3 mb-6">
               <span className="font-mono text-4xl text-mist-100 font-light tracking-tight">
-                $29.99
+                ${currentVariant.price.toFixed(2)}
               </span>
               <span className="font-mono text-xs text-mist-600 tracking-widest uppercase">
                 USD
@@ -184,8 +187,11 @@ export default function ProductSection() {
               ))}
             </ul>
 
-            {/* Buy button */}
-            <BuyButton label="Buy Now — $29.99" className="mb-4" />
+            {/* Buy button — dynamic label */}
+            <BuyButton
+              label={`Buy Now — $${currentVariant.price.toFixed(2)}`}
+              className="mb-4"
+            />
 
             {/* Trust signals */}
             <div className="flex items-center justify-center gap-6 mt-4">
