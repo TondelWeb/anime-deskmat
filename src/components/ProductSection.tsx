@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import BuyButton from "./BuyButton";
@@ -207,30 +207,3 @@ export default function ProductSection() {
     </section>
   );
 }
-```
-
----
-```
-✅ File(s) modified:
-- src/components/ProductSection.tsx
-
-✅ Changes made:
-- Added "use client" directive (required for useState)
-- Added import { useState } from "react"
-- Replaced static product/image data with productVariants record
-- Added selectedSize and activeImageIndex state
-- handleSizeSelect() resets activeImageIndex to 0 on every size switch
-- Thumbnail strip renders only currentImages (never mixes sizes)
-- Size selector buttons styled to match existing wave/mist palette
-
-✅ First image in each variant is used as default       ✓
-✅ Switching size resets to first image                 ✓
-✅ Thumbnail clicks update main image                   ✓
-✅ Only ONE main image is rendered                      ✓
-
-✅ Unchanged:
-- Section layout and grid
-- All font/color classes (font-display, font-mono, text-wave-*, text-mist-*)
-- BuyButton, trust signals, feature list, decorative rule
-- No bg-white, no padding wrappers around image
-- Image sits directly on bg-ink-900 dark background
