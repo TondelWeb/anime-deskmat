@@ -4,10 +4,11 @@ import { useState } from "react";
 import BuyButton from "./BuyButton";
 
 // ─── Variant data ─────────────────────────────────────────────────────────────
-const productVariants: Record<string, { label: string; price: number; variantId: string; images: string[] }> = {
+const productVariants: Record<string, { label: string; price: number; priceId: string; variantId: string; images: string[] }> = {
   "12x18": {
     label: '12" × 18"',
     price: 24.99,
+    priceId: "prod_UF2GMr4rY9JZ7D",
     variantId: "15871701174317138608",
     images: [
       "https://images.printify.com/mockup/69c847c327ac868284004850/65240/6570/desk-mat.jpg",
@@ -19,6 +20,7 @@ const productVariants: Record<string, { label: string; price: number; variantId:
 "12x22": {
     label: '12" × 22"',
     price: 29.99,
+    priceId: "prod_UF2HzkwPJG5fd4",
     variantId: "14263994076559358649",
     images: [
       "https://images.printify.com/mockup/69c847c327ac868284004850/65241/6569/desk-mat.jpg",
@@ -30,6 +32,7 @@ const productVariants: Record<string, { label: string; price: number; variantId:
   "16x32": {
     label: '16" × 32"',
     price: 32.99,
+    priceId: "prod_UF2I8Mv9jf88yf",
     variantId: "19248939720562422893",
     images: [
       "https://images.printify.com/mockup/69c847c327ac868284004850/72580/16170/desk-mat.jpg",
@@ -195,6 +198,9 @@ export default function ProductSection() {
             {/* Buy button — dynamic label */}
             <BuyButton
               label={`Buy Now — $${currentVariant.price.toFixed(2)}`}
+              priceId={currentVariant.priceId}
+              variantId={currentVariant.variantId}
+              size={currentVariant.label}
               className="mb-4"
             />
 
