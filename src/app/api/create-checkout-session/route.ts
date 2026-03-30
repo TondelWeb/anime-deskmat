@@ -20,8 +20,11 @@ export async function POST(req: NextRequest) {
   try {
     const { priceId, variantId, size } = await req.json();
 
+    const host = req.headers.get("host");
+
     const baseUrl =
-      process.env.NEXT_PUBLIC_BASE_URL || `https://${req.headers.get("host")}`;
+      process.env.NEXT_PUBLIC_BASE_URL ||
+      (host ? `https://${host}` : "http://localhost:3000");
 
     // ── Create Stripe Checkout Session ──────────────────────────────────────
     const session = await stripe.checkout.sessions.create({
@@ -62,13 +65,15 @@ export async function POST(req: NextRequest) {
       ],
 
       // ── Redirect URLs ────────────────────────────────────────────────────
-      success_url: `${process.env.NEXT_PUBLIC_URL}/success`,
-      cancel_url: `${process.env.NEXT_PUBLIC_URL}`,
+      success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}/`,
 
       // ── Metadata for webhook identification ──────────────────────────────
       metadata: {
-        product: "anime-desk-mat",
+        product: "nordic-warrior-desk-mat",
         source: "website",
+        size: size ?? "",
+        variantId: variantId ?? "",
       },
     });
 
