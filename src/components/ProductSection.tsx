@@ -45,7 +45,7 @@ const FEATURES = [
   { icon: "◈", label: "Anti-Slip Rubber Base" },
   { icon: "◈", label: "Stitched Edge Finish" },
   { icon: "◈", label: "Water-Resistant Coating" },
-  { icon: "◈", label: "Minimal Anime Ocean Print" },
+  { icon: "◈", label: "Minimal Warrior Print" },
   { icon: "◈", label: "Multiple Size Options" },
 ];
 
@@ -128,7 +128,7 @@ export default function ProductSection() {
             <h2 className="font-display text-4xl md:text-5xl font-light text-mist-100 leading-tight mb-3">
               Minimal Anime
               <br />
-              <span className="italic text-wave-400">Ocean Desk Mat</span>
+              <span className="italic text-wave-400">Thorfinn Desk Mat</span>
             </h2>
 
             {/* Thin rule */}
@@ -170,11 +170,13 @@ export default function ProductSection() {
             </div>
 
             {/* Description */}
-            <p className="font-body text-mist-400 font-light leading-relaxed text-base mb-8">
-              A premium extended mouse pad designed for clean, aesthetic desk
-              setups. Smooth micro-weave surface for precise tracking, a
-              non-slip rubber base that stays put, and a minimal anime ocean
-              scene that brings calm focus to your workspace.
+             <p className="font-body text-mist-400 font-light leading-relaxed text-base mb-8">
+              A premium extended mouse pad inspired by a minimalist warrior
+              aesthetic. Designed for clean, focused desk setups, it features a
+              smooth micro-weave surface for precise tracking and a non-slip
+              rubber base for stability. The artwork captures a calm yet powerful
+              moment, bringing a subtle anime-inspired atmosphere to your
+              workspace.
             </p>
 
             {/* Feature list */}
