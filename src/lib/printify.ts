@@ -63,8 +63,6 @@ export function extractShippingFromStripe(
   return shipping;
 }
 
-// printifyProductId and printifyVariantId come from Stripe session metadata
-// so each size variant maps to the correct Printify variant automatically
 export async function createPrintifyOrder(
   externalId: string | undefined,
   shipping: ShippingAddress,
@@ -74,15 +72,12 @@ export async function createPrintifyOrder(
 
   const apiKey = process.env.PRINTIFY_API_KEY;
   const shopId = process.env.PRINTIFY_SHOP_ID;
-  const variantId = Number(printifyVariantId);
 
   console.log("[Printify] Env check:", {
     PRINTIFY_API_KEY: apiKey ? `set (${apiKey.slice(0, 6)}...)` : "❌ MISSING",
     PRINTIFY_SHOP_ID: shopId ? `set (${shopId})` : "❌ MISSING",
     printifyProductId: printifyProductId || "❌ MISSING",
-    printifyVariantId: printifyVariantId
-      ? `set → parsed as ${variantId} (${isNaN(variantId) ? "❌ NaN" : "✅ valid"})`
-      : "❌ MISSING",
+    printifyVariantId: printifyVariantId || "❌ MISSING",
   });
 
   if (!apiKey) {
@@ -94,21 +89,23 @@ export async function createPrintifyOrder(
     return null;
   }
   if (!printifyProductId) {
-    console.error("[Printify] ❌ printifyProductId is missing — not passed from webhook metadata");
+    console.error("[Printify] ❌ printifyProductId is missing");
     return null;
   }
-  if (!printifyVariantId || isNaN(variantId)) {
-    console.error("[Printify] ❌ printifyVariantId is missing or not a number:", printifyVariantId);
+  if (!printifyVariantId) {
+    console.error("[Printify] ❌ printifyVariantId is missing");
     return null;
   }
 
+  // variant_id is kept as a string — these IDs are too large for JS Number
+  // and would lose precision if converted with Number()
   const payload = {
     external_id: externalId ?? undefined,
     label: `Order for ${shipping.first_name} ${shipping.last_name}`,
     line_items: [
       {
         product_id: printifyProductId,
-        variant_id: variantId,
+        variant_id: printifyVariantId,
         quantity: 1,
       },
     ],
