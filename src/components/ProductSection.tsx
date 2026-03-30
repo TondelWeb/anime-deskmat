@@ -9,7 +9,7 @@ const productVariants: Record<string, { label: string; price: number; priceId: s
     label: '12" × 18"',
     price: 24.99,
     priceId: "price_1TGYBYAbBgE9tbEaOjUPusgN",
-    variantId: "15871701174317138608",
+    variantId: "65240",
     images: [
       "https://images.printify.com/mockup/69c847c327ac868284004850/65240/6570/desk-mat.jpg",
       "https://images.printify.com/mockup/69c847c327ac868284004850/65240/6576/desk-mat.jpg",
@@ -21,7 +21,7 @@ const productVariants: Record<string, { label: string; price: number; priceId: s
     label: '12" × 22"',
     price: 29.99,
     priceId: "price_1TGYD0AbBgE9tbEaSzsqvO8W",
-    variantId: "14263994076559358649",
+    variantId: "65241",
     images: [
       "https://images.printify.com/mockup/69c847c327ac868284004850/65241/6569/desk-mat.jpg",
       "https://images.printify.com/mockup/69c847c327ac868284004850/65241/6575/desk-mat.jpg",
