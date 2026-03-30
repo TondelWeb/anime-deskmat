@@ -11,15 +11,15 @@ export default function Footer() {
         </p>
 
         <div className="flex gap-6">
-          {["Privacy", "Terms", "Contact"].map((link) => (
-            <a
-              key={link}
-              href="#"
-              className="font-mono text-[10px] text-mist-600 hover:text-wave-400 tracking-widest transition-colors duration-200"
-            >
-              {link}
-            </a>
-          ))}
+          <a href="/privacy" className="font-mono text-[10px] text-mist-600 hover:text-wave-400 tracking-widest transition-colors duration-200">
+            Privacy
+          </a>
+          <a href="/terms" className="font-mono text-[10px] text-mist-600 hover:text-wave-400 tracking-widest transition-colors duration-200">
+            Terms
+          </a>
+          <a href="mailto:tondelweb@gmail.com" className="font-mono text-[10px] text-mist-600 hover:text-wave-400 tracking-widest transition-colors duration-200">
+            Contact
+          </a>
         </div>
       </div>
     </footer>

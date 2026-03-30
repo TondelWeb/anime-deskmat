@@ -63,9 +63,7 @@ export default function Hero() {
           Desk Mat Co.
         </span>
         <div className="flex items-center gap-6">
-          <span className="font-mono text-xs tracking-widest text-mist-600 hidden sm:block">
-            Free shipping over $50
-          </span>
+
           <button
             onClick={scrollToProduct}
             className="font-mono text-xs tracking-widest text-wave-400 border border-wave-500/30 px-4 py-2 rounded-sm hover:bg-wave-500/10 transition-all duration-300"

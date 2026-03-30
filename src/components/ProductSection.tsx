@@ -151,9 +151,7 @@ export default function ProductSection() {
               <span className="font-mono text-xs text-mist-600 tracking-widest uppercase">
                 USD
               </span>
-              <span className="ml-auto font-mono text-xs text-wave-400/70 tracking-widest border border-wave-500/20 px-3 py-1 rounded-sm">
-                Free Shipping
-              </span>
+
             </div>
 
             {/* Size selector */}
