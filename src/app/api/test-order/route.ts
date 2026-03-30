@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 import { createPrintifyOrder } from "@/lib/printify";
 
 export async function GET() {
+  if (process.env.NODE_ENV === "production") {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
   const mockShipping = {
     first_name: "Test",
     last_name: "User",

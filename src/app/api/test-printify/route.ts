@@ -3,6 +3,10 @@ import { createPrintifyOrder } from "@/lib/printify";
 
 // Temporary test route to exercise createPrintifyOrder with mock data.
 export async function GET(req: Request) {
+  if (process.env.NODE_ENV === "production") {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
   console.log("[test-printify] GET received");
 
   const mockCustomer = {

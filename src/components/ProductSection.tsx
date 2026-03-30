@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import BuyButton from "./BuyButton";
 
 // ─── Variant data ─────────────────────────────────────────────────────────────
@@ -89,10 +90,13 @@ export default function ProductSection() {
 
             {/* Main image */}
             <div className="flex justify-center items-center w-full">
-              <img
+              <Image
                 src={mainImage}
                 alt={currentVariant.label}
-                className="w-full max-w-[600px] h-auto object-contain drop-shadow-2xl"
+                width={600}
+                height={400}
+                className="w-full max-w-[600px] h-auto object-contain"
+                priority
               />
             </div>
 
@@ -109,9 +113,11 @@ export default function ProductSection() {
                   }`}
                   aria-label={`View image ${index + 1}`}
                 >
-                  <img
+                  <Image
                     src={img}
                     alt={`${currentVariant.label} view ${index + 1}`}
+                    width={64}
+                    height={64}
                     className="w-full h-full object-cover"
                   />
                 </button>

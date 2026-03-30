@@ -7,7 +7,9 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    domains: ["images.printify.com"],
+    remotePatterns: [
+      { protocol: "https", hostname: "images.printify.com" },
+    ],
   },
 };
 

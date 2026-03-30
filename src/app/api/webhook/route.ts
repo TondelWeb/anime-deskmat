@@ -116,6 +116,6 @@ export async function POST(req: NextRequest) {
   } catch (outerErr: unknown) {
     const msg = outerErr instanceof Error ? outerErr.message : String(outerErr);
     console.error("[Webhook] 💥 Unexpected top-level error:", msg);
-    return NextResponse.json({ received: true, error: msg }, { status: 200 });
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }

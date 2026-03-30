@@ -5,13 +5,21 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16",
 });
 
+const SIZE_MAP: Record<string, { priceId: string; variantId: string }> = {
+  "12x18": { priceId: process.env.STRIPE_PRICE_12X18 ?? "price_1TGYBYAbBgE9tbEaOjUPusgN", variantId: "65240" },
+  "12x22": { priceId: process.env.STRIPE_PRICE_12X22 ?? "price_1TGYD0AbBgE9tbEaSzsqvO8W", variantId: "65241" },
+  "16x32": { priceId: process.env.STRIPE_PRICE_16X32 ?? "price_1TGYEBAbBgE9tbEaL2yIVaXn", variantId: "72580" },
+};
+
 export async function POST(req: NextRequest) {
   try {
-    const { priceId, variantId, size } = await req.json();
+    const { size } = await req.json();
 
-    if (!priceId) {
-      return NextResponse.json({ error: "Missing priceId" }, { status: 400 });
+    const variant = SIZE_MAP[size];
+    if (!variant) {
+      return NextResponse.json({ error: "Invalid size" }, { status: 400 });
     }
+    const { priceId, variantId } = variant;
 
     const host = req.headers.get("host");
     const baseUrl =
