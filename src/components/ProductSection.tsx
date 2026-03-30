@@ -8,7 +8,7 @@ const productVariants: Record<string, { label: string; price: number; priceId: s
   "12x18": {
     label: '12" × 18"',
     price: 24.99,
-    priceId: "prod_UF2GMr4rY9JZ7D",
+    priceId: "price_REPLACE_ME",
     variantId: "15871701174317138608",
     images: [
       "https://images.printify.com/mockup/69c847c327ac868284004850/65240/6570/desk-mat.jpg",
@@ -20,7 +20,7 @@ const productVariants: Record<string, { label: string; price: number; priceId: s
 "12x22": {
     label: '12" × 22"',
     price: 29.99,
-    priceId: "prod_UF2HzkwPJG5fd4",
+    priceId: "price_REPLACE_ME",
     variantId: "14263994076559358649",
     images: [
       "https://images.printify.com/mockup/69c847c327ac868284004850/65241/6569/desk-mat.jpg",
@@ -32,7 +32,7 @@ const productVariants: Record<string, { label: string; price: number; priceId: s
   "16x32": {
     label: '16" × 32"',
     price: 32.99,
-    priceId: "prod_UF2I8Mv9jf88yf",
+    priceId: "price_REPLACE_ME",
     variantId: "19248939720562422893",
     images: [
       "https://images.printify.com/mockup/69c847c327ac868284004850/72580/16170/desk-mat.jpg",

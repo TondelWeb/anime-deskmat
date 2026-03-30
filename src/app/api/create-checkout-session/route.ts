@@ -18,6 +18,8 @@ const PRODUCT = {
 
 export async function POST(req: NextRequest) {
   try {
+    const { priceId, variantId, size } = await req.json();
+
     const baseUrl =
       process.env.NEXT_PUBLIC_BASE_URL || `https://${req.headers.get("host")}`;
 
@@ -29,16 +31,8 @@ export async function POST(req: NextRequest) {
       // ── line items: what the customer is buying ─────────────────────────
       line_items: [
         {
-          price_data: {
-            currency: PRODUCT.currency,
-            unit_amount: PRODUCT.price,
-            product_data: {
-              name: PRODUCT.name,
-              description: PRODUCT.description,
-              // images: ["https://your-domain.com/product-image.jpg"],
-            },
-          },
-          quantity: PRODUCT.quantity,
+          price: priceId,
+          quantity: 1,
         },
       ],
 
@@ -68,8 +62,8 @@ export async function POST(req: NextRequest) {
       ],
 
       // ── Redirect URLs ────────────────────────────────────────────────────
-      success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${baseUrl}/`,
+      success_url: `${process.env.NEXT_PUBLIC_URL}/success`,
+      cancel_url: `${process.env.NEXT_PUBLIC_URL}`,
 
       // ── Metadata for webhook identification ──────────────────────────────
       metadata: {
