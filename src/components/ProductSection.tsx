@@ -33,7 +33,7 @@ const productVariants: Record<string, { label: string; price: number; priceId: s
     label: '16" × 32"',
     price: 32.99,
     priceId: "price_1TGYEBAbBgE9tbEaL2yIVaXn",
-    variantId: "19248939720562422893",
+    variantId: "72580",
     images: [
       "https://images.printify.com/mockup/69c847c327ac868284004850/72580/16170/desk-mat.jpg",
       "https://images.printify.com/mockup/69c847c327ac868284004850/72580/16173/desk-mat.jpg",
