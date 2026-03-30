@@ -18,12 +18,6 @@ interface PrintifyOrderResponse {
   status: string;
 }
 
-// ─── extractShippingFromStripe ────────────────────────────────────────────────
-//
-// FIX: Original threw when shipping/customer was missing.
-// That throw escaped the webhook's fulfillment try/catch, causing silent 500s.
-// Now returns null so the caller can guard and return 200 gracefully.
-//
 export function extractShippingFromStripe(
   session: Stripe.Checkout.Session
 ): ShippingAddress | null {
@@ -34,7 +28,6 @@ export function extractShippingFromStripe(
   console.log("[Printify] shipping_details:", JSON.stringify(details, null, 2));
   console.log("[Printify] customer_details:", JSON.stringify(customer, null, 2));
 
-  // ❌ BEFORE: threw here — now returns null so caller can handle gracefully
   if (!details?.address) {
     console.error("[Printify] ❌ shipping_details.address is null or missing");
     return null;
@@ -51,7 +44,7 @@ export function extractShippingFromStripe(
   const name = details.name ?? customer.name ?? "";
   const [rawFirst, ...rest] = name.trim().split(" ");
   const first_name = rawFirst || "Customer";
-  const last_name = rest.join(" ") || "."; // Printify requires non-empty last_name
+  const last_name = rest.join(" ") || ".";
 
   const shipping: ShippingAddress = {
     first_name,
@@ -70,49 +63,42 @@ export function extractShippingFromStripe(
   return shipping;
 }
 
-// ─── createPrintifyOrder ──────────────────────────────────────────────────────
-//
-// FIX: Original threw on missing env vars — those throws escaped the webhook
-// catch block, returning 200 to Stripe but silently skipping Printify.
-// Now returns null with detailed logs so the caller can handle it explicitly.
-//
+// printifyProductId and printifyVariantId come from Stripe session metadata
+// so each size variant maps to the correct Printify variant automatically
 export async function createPrintifyOrder(
   externalId: string | undefined,
-  shipping: ShippingAddress
+  shipping: ShippingAddress,
+  printifyProductId: string,
+  printifyVariantId: string
 ): Promise<PrintifyOrderResponse | null> {
 
-  // ── Validate env vars — log each one individually so you can see exactly
-  //    which is missing in Vercel logs without guessing ──────────────────────
-  const apiKey    = process.env.PRINTIFY_API_KEY;
-  const shopId    = process.env.PRINTIFY_SHOP_ID;
-  const productId = process.env.PRINTIFY_PRODUCT_ID;
-  const variantRaw = process.env.PRINTIFY_VARIANT_ID;
-  const variantId  = variantRaw ? Number(variantRaw) : NaN;
+  const apiKey = process.env.PRINTIFY_API_KEY;
+  const shopId = process.env.PRINTIFY_SHOP_ID;
+  const variantId = Number(printifyVariantId);
 
   console.log("[Printify] Env check:", {
-    PRINTIFY_API_KEY:    apiKey    ? `set (${apiKey.slice(0, 6)}...)` : "❌ MISSING",
-    PRINTIFY_SHOP_ID:    shopId    ? `set (${shopId})`                : "❌ MISSING",
-    PRINTIFY_PRODUCT_ID: productId ? `set (${productId})`             : "❌ MISSING",
-    PRINTIFY_VARIANT_ID: variantRaw
+    PRINTIFY_API_KEY: apiKey ? `set (${apiKey.slice(0, 6)}...)` : "❌ MISSING",
+    PRINTIFY_SHOP_ID: shopId ? `set (${shopId})` : "❌ MISSING",
+    printifyProductId: printifyProductId || "❌ MISSING",
+    printifyVariantId: printifyVariantId
       ? `set → parsed as ${variantId} (${isNaN(variantId) ? "❌ NaN" : "✅ valid"})`
       : "❌ MISSING",
   });
 
-  // ❌ BEFORE: these threw — now return null so webhook can still ack Stripe
   if (!apiKey) {
-    console.error("[Printify] ❌ PRINTIFY_API_KEY is not set — cannot call Printify");
+    console.error("[Printify] ❌ PRINTIFY_API_KEY is not set");
     return null;
   }
   if (!shopId) {
-    console.error("[Printify] ❌ PRINTIFY_SHOP_ID is not set — cannot call Printify");
+    console.error("[Printify] ❌ PRINTIFY_SHOP_ID is not set");
     return null;
   }
-  if (!productId) {
-    console.error("[Printify] ❌ PRINTIFY_PRODUCT_ID is not set — cannot call Printify");
+  if (!printifyProductId) {
+    console.error("[Printify] ❌ printifyProductId is missing — not passed from webhook metadata");
     return null;
   }
-  if (!variantRaw || isNaN(variantId)) {
-    console.error("[Printify] ❌ PRINTIFY_VARIANT_ID is missing or not a valid number:", variantRaw);
+  if (!printifyVariantId || isNaN(variantId)) {
+    console.error("[Printify] ❌ printifyVariantId is missing or not a number:", printifyVariantId);
     return null;
   }
 
@@ -121,7 +107,7 @@ export async function createPrintifyOrder(
     label: `Order for ${shipping.first_name} ${shipping.last_name}`,
     line_items: [
       {
-        product_id: productId,
+        product_id: printifyProductId,
         variant_id: variantId,
         quantity: 1,
       },
@@ -144,7 +130,6 @@ export async function createPrintifyOrder(
 
   const url = `https://api.printify.com/v1/shops/${shopId}/orders.json`;
 
-  // ── Log the full request BEFORE sending ─────────────────────────────────
   console.log("[Printify] 📤 Sending order to Printify:");
   console.log("[Printify] URL:", url);
   console.log("[Printify] Payload:", JSON.stringify(payload, null, 2));
@@ -160,34 +145,28 @@ export async function createPrintifyOrder(
       body: JSON.stringify(payload),
     });
   } catch (networkErr: unknown) {
-    // fetch() itself threw — network failure, DNS issue, etc.
     const msg = networkErr instanceof Error ? networkErr.message : String(networkErr);
     console.error("[Printify] ❌ Network error calling Printify API:", msg);
     return null;
   }
 
-  // ── Log the FULL response regardless of success/failure ──────────────────
   const text = await res.text();
   console.log("[Printify] 📥 Printify response status:", res.status, res.statusText);
   console.log("[Printify] 📥 Printify response body:", text);
 
   if (!res.ok) {
-    // ❌ BEFORE: threw here — now returns null and logs clearly
     console.error(`[Printify] ❌ Printify API returned ${res.status}:`, text);
-
-    // Common status codes to help you debug without opening Printify docs:
     if (res.status === 401) console.error("[Printify] → 401 = API key is wrong or expired");
     if (res.status === 403) console.error("[Printify] → 403 = API key lacks permission for this shop");
     if (res.status === 404) console.error("[Printify] → 404 = shop_id or product_id not found");
     if (res.status === 422) console.error("[Printify] → 422 = payload validation failed (check variant_id, address fields)");
-
     return null;
   }
 
   let data: PrintifyOrderResponse;
   try {
     data = JSON.parse(text) as PrintifyOrderResponse;
-  } catch (parseErr) {
+  } catch {
     console.error("[Printify] ❌ Failed to parse Printify success response as JSON:", text);
     return null;
   }

@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Webhook secret not configured" }, { status: 500 });
     }
 
-    const rawBody  = await req.text();
+    const rawBody = await req.text();
     const signature = req.headers.get("stripe-signature");
 
     if (!signature) {
@@ -57,6 +57,7 @@ export async function POST(req: NextRequest) {
           payment_status:   fullSession.payment_status,
           customer_details: fullSession.customer_details,
           shipping_details: fullSession.shipping_details,
+          metadata:         fullSession.metadata,
           line_items_count: fullSession.line_items?.data?.length ?? 0,
         });
       } catch (retrieveErr: unknown) {
@@ -66,29 +67,39 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      // ── Extract shipping — returns null instead of throwing ───────────────
+      // Extract shipping — returns null instead of throwing
       const shipping = extractShippingFromStripe(fullSession);
       if (!shipping) {
         console.error(
           "[Webhook] ❌ extractShippingFromStripe returned null. Full session:",
           JSON.stringify(fullSession, null, 2)
         );
-        // Return 200 — Stripe retrying won't fix a data problem
         return NextResponse.json(
           { received: true, warning: "Missing shipping/customer data — fulfillment skipped", sessionId: fullSession.id },
           { status: 200 }
         );
       }
 
-      // ── Call Printify — returns null instead of throwing ──────────────────
-      console.log("[Webhook] 🛍️  Calling createPrintifyOrder for session:", fullSession.id);
-      const printifyOrder = await createPrintifyOrder(fullSession.id, shipping);
+      // Read variantId and productId from Stripe session metadata
+      // These are set at checkout time from ProductSection.tsx
+      const printifyVariantId = fullSession.metadata?.variantId ?? "";
+      const printifyProductId = fullSession.metadata?.printifyProductId ?? process.env.PRINTIFY_PRODUCT_ID ?? "";
+
+      console.log("[Webhook] 🛍️  Calling createPrintifyOrder:", {
+        sessionId: fullSession.id,
+        printifyProductId,
+        printifyVariantId,
+      });
+
+      const printifyOrder = await createPrintifyOrder(
+        fullSession.id,
+        shipping,
+        printifyProductId,
+        printifyVariantId
+      );
 
       if (!printifyOrder) {
-        console.error(
-          "[Webhook] ❌ createPrintifyOrder returned null — check [Printify] logs above for the exact cause"
-        );
-        // Still 200 — Printify failure is logged, Stripe shouldn't retry
+        console.error("[Webhook] ❌ createPrintifyOrder returned null — check [Printify] logs above");
         return NextResponse.json(
           { received: true, warning: "Printify order failed — see logs", sessionId: fullSession.id },
           { status: 200 }

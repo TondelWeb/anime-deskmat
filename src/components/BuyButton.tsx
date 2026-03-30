@@ -100,19 +100,3 @@ export default function BuyButton({
     </div>
   );
 }
-```
-
----
-```
-✅ File modified: src/components/BuyButton.tsx
-
-✅ Fixed: body was sending {} — now sends { priceId, variantId, size }
-✅ priceId drives correct Stripe price per size
-✅ No payment link anywhere
-✅ Dynamic checkout session used for all sizes
-
-⚠️  Still required: replace the three placeholder priceIds in
-    ProductSection.tsx with real Stripe price IDs:
-    "price_12x18_REPLACE_ME"
-    "price_12x22_REPLACE_ME"
-    "price_16x32_REPLACE_ME"
