@@ -204,7 +204,7 @@ export default function ProductSection() {
               label={`Buy Now — $${currentVariant.price.toFixed(2)}`}
               priceId={currentVariant.priceId}
               variantId={currentVariant.variantId}
-              size={currentVariant.label}
+              size={selectedSize}
               className="mb-4"
             />
 
