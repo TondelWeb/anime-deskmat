@@ -5,21 +5,14 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16",
 });
 
-const SIZE_MAP: Record<string, { priceId: string; variantId: string }> = {
-  "12x18": { priceId: process.env.STRIPE_PRICE_12X18 ?? "price_1TGYBYAbBgE9tbEaOjUPusgN", variantId: "65240" },
-  "12x22": { priceId: process.env.STRIPE_PRICE_12X22 ?? "price_1TGYD0AbBgE9tbEaSzsqvO8W", variantId: "65241" },
-  "16x32": { priceId: process.env.STRIPE_PRICE_16X32 ?? "price_1TGYEBAbBgE9tbEaL2yIVaXn", variantId: "72580" },
-};
-
 export async function POST(req: NextRequest) {
   try {
-    const { size } = await req.json();
+    const body = await req.json().catch(() => ({}));
+    const { priceId } = body as { priceId?: string };
 
-    const variant = SIZE_MAP[size];
-    if (!variant) {
-      return NextResponse.json({ error: "Invalid size" }, { status: 400 });
+    if (!priceId) {
+      return NextResponse.json({ error: "priceId is required" }, { status: 400 });
     }
-    const { priceId, variantId } = variant;
 
     const host = req.headers.get("host");
     const baseUrl =
@@ -59,18 +52,15 @@ export async function POST(req: NextRequest) {
       ],
 
       success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${baseUrl}/`,
+      cancel_url: `${baseUrl}/shop`,
 
       metadata: {
-        product: "nordic-warrior-desk-mat",
         source: "website",
-        size: size ?? "",
-        variantId: variantId ?? "",
-        printifyProductId: process.env.PRINTIFY_PRODUCT_ID ?? "",
+        priceId,
       },
     });
 
-    console.log("[Checkout] Session created:", session.id, "| size:", size, "| priceId:", priceId);
+    console.log("[Checkout] Session created:", session.id, "| priceId:", priceId);
 
     return NextResponse.json({ url: session.url }, { status: 200 });
   } catch (err: unknown) {

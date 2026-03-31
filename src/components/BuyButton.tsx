@@ -3,21 +3,17 @@
 import { useState } from "react";
 
 interface BuyButtonProps {
+  priceId: string;
   variant?: "primary" | "secondary";
   className?: string;
   label?: string;
-  priceId: string;
-  variantId: string;
-  size: string;
 }
 
 export default function BuyButton({
+  priceId,
   variant = "primary",
   className = "",
   label = "Buy Now",
-  priceId,
-  variantId,
-  size,
 }: BuyButtonProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -30,7 +26,7 @@ export default function BuyButton({
       const res = await fetch("/api/create-checkout-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ priceId, variantId, size }),
+        body: JSON.stringify({ priceId }),
       });
 
       const data = await res.json();

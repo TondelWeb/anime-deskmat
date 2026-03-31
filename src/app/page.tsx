@@ -32,7 +32,7 @@ export default function HomePage() {
       {/* ── Hero: full-width opening impression ── */}
       <Hero />
 
-      {/* ── Product: details + buy CTA ── */}
+      {/* ── Featured product showcase ── */}
       <ProductSection />
 
       {/* ── Footer ── */}
