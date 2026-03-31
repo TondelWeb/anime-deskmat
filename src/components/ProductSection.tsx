@@ -1,6 +1,59 @@
 import Link from "next/link";
 import { getProductBySlug } from "@/data/products";
+import { useState } from "react";
+import Image from "next/image";
+import BuyButton from "./BuyButton";
 
+// ─── Variant data ─────────────────────────────────────────────────────────────
+const productVariants: Record<string, { label: string; price: number; priceId: string; variantId: string; images: string[] }> = {
+  "12x18": {
+    label: '12" × 18"',
+    price: 24.99,
+    priceId: "price_1TGYBYAbBgE9tbEaOjUPusgN",
+    variantId: "65240",
+    images: [
+      "https://images.printify.com/mockup/69c847c327ac868284004850/65240/6570/desk-mat.jpg",
+      "https://images.printify.com/mockup/69c847c327ac868284004850/65240/6576/desk-mat.jpg",
+      "https://images.printify.com/mockup/69c847c327ac868284004850/65240/6574/desk-mat.jpg",
+      "https://images.printify.com/mockup/69c847c327ac868284004850/65240/6572/desk-mat.jpg",
+    ],
+  },
+  "12x22": {
+    label: '12" × 22"',
+    price: 29.99,
+    priceId: "price_1TGYD0AbBgE9tbEaSzsqvO8W",
+    variantId: "65241",
+    images: [
+      "https://images.printify.com/mockup/69c847c327ac868284004850/65241/6569/desk-mat.jpg",
+      "https://images.printify.com/mockup/69c847c327ac868284004850/65241/6575/desk-mat.jpg",
+      "https://images.printify.com/mockup/69c847c327ac868284004850/65241/6573/desk-mat.jpg",
+      "https://images.printify.com/mockup/69c847c327ac868284004850/65241/6571/desk-mat.jpg",
+    ],
+  },
+  "16x32": {
+    label: '16" × 32"',
+    price: 32.99,
+    priceId: "price_1TGYEBAbBgE9tbEaL2yIVaXn",
+    variantId: "72580",
+    images: [
+      "https://images.printify.com/mockup/69c847c327ac868284004850/72580/16170/desk-mat.jpg",
+      "https://images.printify.com/mockup/69c847c327ac868284004850/72580/16173/desk-mat.jpg",
+      "https://images.printify.com/mockup/69c847c327ac868284004850/72580/16172/desk-mat.jpg",
+      "https://images.printify.com/mockup/69c847c327ac868284004850/72580/16171/desk-mat.jpg",
+    ],
+  },
+};
+
+const FEATURES = [
+  { icon: "◈", label: "Smooth Micro-Weave Surface" },
+  { icon: "◈", label: "Anti-Slip Rubber Base" },
+  { icon: "◈", label: "Stitched Edge Finish" },
+  { icon: "◈", label: "Water-Resistant Coating" },
+  { icon: "◈", label: "Minimal Warrior Print" },
+  { icon: "◈", label: "Multiple Size Options" },
+];
+
+// ─── Component ────────────────────────────────────────────────────────────────
 export default function ProductSection() {
   const product = getProductBySlug("thorfinn-mat")!;
   const featuredImage = product.images[0];
