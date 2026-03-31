@@ -33,7 +33,7 @@ export const products: Product[] = [
     sizes: [
       {
         label: '12" × 18"',
-        priceId: "price_1TGnQcAHj7RoGh5llZqmQ504",
+        priceId: "price_1TGYBYAbBgE9tbEaOjUPusgN",
         displayPrice: "$24.99",
         images: [
           "https://images.printify.com/mockup/69c847c327ac868284004850/65240/6570/desk-mat.jpg",
@@ -44,7 +44,7 @@ export const products: Product[] = [
       },
       {
         label: '12" × 22"',
-        priceId: "price_1TGnQaAHj7RoGh5lblUXfxEO",
+        priceId: "price_1TGYD0AbBgE9tbEaSzsqvO8W",
         displayPrice: "$29.99",
         images: [
           "https://images.printify.com/mockup/69c847c327ac868284004850/65241/6569/desk-mat.jpg",
@@ -55,7 +55,7 @@ export const products: Product[] = [
       },
       {
         label: '16" × 32"',
-        priceId: "price_1TGnQTAHj7RoGh5luiQhm831",
+        priceId: "price_1TGYEBAbBgE9tbEaL2yIVaXn",
         displayPrice: "$32.99",
         images: [
           "https://images.printify.com/mockup/69c847c327ac868284004850/72580/16170/desk-mat.jpg",
